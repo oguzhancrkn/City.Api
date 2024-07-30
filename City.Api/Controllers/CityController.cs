@@ -21,10 +21,10 @@ namespace City.Api.Controllers
         }
         [HttpGet("{id}")]
         public ActionResult<CityEntity> GetSingle(int id)
-        {   
+        {
             var city = cityEnties.Find(x => x.Id == id);
             return Ok(city);
-                    
+
         }
         [HttpPost]
         public ActionResult<List<CityEntity>> AddCity(CityEntity newcity)
@@ -32,6 +32,7 @@ namespace City.Api.Controllers
             cityEnties.Add(newcity);
             return Ok(cityEnties);
         }
+        [HttpDelete]
 
     }
 }
