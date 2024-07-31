@@ -1,4 +1,5 @@
 ﻿using City.Api.Core;
+using City.Api.Services.CityService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace City.Api.Controllers
@@ -6,33 +7,36 @@ namespace City.Api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class CityController : ControllerBase
-    {
-        private static List<CityEntity> cityEnties = new List<CityEntity>
-        {
-            new CityEntity(),
-            new CityEntity{Id=1 , Name = "Trabzon" }
-        };
+    {   
+       private readonly ICityService _cityService;
+       public CityController(ICityService cityService)         
+       {
+            _cityService = cityService;
+        
+       }
 
         [HttpGet]
-        [Route("GetAll")]
-        public ActionResult<List<CityEntity>> Get()
+        //[Route("GetAll")]
+        public async Task<ActionResult<ServiceResponse<List<CityEntity>>>> Get()
         {
-            return Ok(cityEnties);
+            return Ok(_cityService.GetAllCity());
         }
+
         [HttpGet("{id}")]
-        public ActionResult<CityEntity> GetSingle(int id)
+        public async Task<ActionResult<ServiceResponse<CityEntity>>> GetSingle(int id)
         {
-            var city = cityEnties.Find(x => x.Id == id);
-            return Ok(city);
+        
+            return Ok(_cityService.GetAllCityById(id));
 
         }
+
         [HttpPost]
-        public ActionResult<List<CityEntity>> AddCity(CityEntity newcity)
+        public async Task<ActionResult<ServiceResponse<List<CityEntity>>>> AddCity(CityEntity newcity)
         {
-            cityEnties.Add(newcity);
-            return Ok(cityEnties);
+           
+            return Ok(_cityService.AddCity(newcity));
         }
-        [HttpDelete]
+
 
     }
 }
