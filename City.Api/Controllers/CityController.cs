@@ -1,4 +1,5 @@
 ﻿using City.Api.Core;
+using City.Api.Core.Dtos.City;
 using City.Api.Services.CityService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,13 +18,13 @@ namespace City.Api.Controllers
 
         [HttpGet]
         //[Route("GetAll")]
-        public async Task<ActionResult<ServiceResponse<List<CityEntity>>>> Get()
+        public async Task<ActionResult<ServiceResponse<List<GetCity>>>> Get()
         {
             return Ok(_cityService.GetAllCity());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ServiceResponse<CityEntity>>> GetSingle(int id)
+        public async Task<ActionResult<ServiceResponse<GetCity>>> GetSingle(int id)
         {
         
             return Ok(_cityService.GetAllCityById(id));
@@ -31,7 +32,7 @@ namespace City.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<List<CityEntity>>>> AddCity(CityEntity newcity)
+        public async Task<ActionResult<ServiceResponse<List<GetCity>>>> AddCity(AddCity newcity)
         {
            
             return Ok(_cityService.AddCity(newcity));
