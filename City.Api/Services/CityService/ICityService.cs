@@ -10,6 +10,8 @@ namespace City.Api.Services.CityService
         Task<ServiceResponse<GetCity>> GetAllCityById(int id);
         
         Task<ServiceResponse<List<GetCity>>> AddCity(AddCity newcity);
+        Task<ServiceResponse<GetCity>> UpdateCity(UpdateCity updatecity);
+        Task<ServiceResponse<List<GetCity>>> DeleteCity(int id);
 
     }
 }
