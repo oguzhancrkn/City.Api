@@ -9,7 +9,10 @@ namespace City.Api.Data
 
         }
 
+        //Core da kolonları actıktan sonra burada Data setimizi oluşturuyoruz.
+
         public DbSet<CityEntity> CityEntities { get; set; }
+        public DbSet<UserEntity> userEntities { get; set; }
 
 
 

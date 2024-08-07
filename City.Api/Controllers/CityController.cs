@@ -38,8 +38,10 @@ namespace City.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<List<GetCity>>>> AddCity(AddCity newcity)
         {
-
-            return Ok(_cityService.AddCity(newcity));
+            //var response = await _cityService.AddCity(newcity);
+            var data = await _cityService.AddCity(newcity);
+            //return Ok(_cityService.AddCity(newcity));
+            return Ok(data);
         }
         [HttpPut]
 

@@ -13,6 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<ICityService, CityService>();
+builder.Services.AddScoped<IAuthRespository, AuthRepository> ();
 
 var app = builder.Build();
 

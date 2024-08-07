@@ -6,10 +6,11 @@ namespace City.Api.Core
     {
         public int Id { get; set; }
 
-        public string Name { get; set; } = "İStanbul0";
+        public string Name { get; set; } = "İstanbul";
 
         public int Populasyon { get; set; } = 1700000;
         public RgbCity Class { get; set; } = RgbCity.Marmara;
+        public UserEntity? User { get; set; }
         
 
     }
