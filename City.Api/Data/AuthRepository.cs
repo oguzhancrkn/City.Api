@@ -1,4 +1,7 @@
-﻿using City.Api.Core;
+﻿using Azure;
+using City.Api.Core;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace City.Api.Data
 {
@@ -10,9 +13,30 @@ namespace City.Api.Data
         {
             _context = context;
         }
-        public Task<ServiceResponse<string>> Login(string username, string password)
+
+        //Login işleminde alınacak hatala ve mesajları metodu
+        public  async Task<ServiceResponse<string>> Login(string username, string password)
         {
-            throw new NotImplementedException();
+           var response = new ServiceResponse<string>();
+            var user = await _context.userEntities.FirstOrDefaultAsync(x=>x.Username.ToLower().Equals(username.ToLower()));
+
+            if (user == null)
+            {
+                response.Success = false;
+                response.Message = "Kullanıcı Bulunamadı";
+
+            }
+            else if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            {
+                response.Success=false;
+                response.Message = "Hatalı Şifre";
+            }
+            else
+            {
+                response.Data =user.Id.ToString();
+            }
+            return response;
+            
         }
 
         public async Task<ServiceResponse<int>> Register(UserEntity user, string password)
@@ -27,6 +51,7 @@ namespace City.Api.Data
                 return response;
             }
 
+
             CreatePasswordHash(password,out byte[] passwordHash, out byte[] passwordSalt);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
@@ -39,12 +64,19 @@ namespace City.Api.Data
             return response;
         }
 
-        public Task<bool> UserExists(string username)
+        public async Task<bool> UserExists(string username)
         {
-            throw new NotImplementedException();
+           if(await _context.userEntities.AnyAsync(x=>x.Username.ToLower() == username.ToLower()))
+           {
+                
+                return true;
+               
+           }
+           return false;
         }
 
-        private void CreatePasswordHash (string password , out byte[] passwordHash , out byte[] passwordSalt)
+        //passsword oluşturma 
+        private void CreatePasswordHash(string password , out byte[] passwordHash , out byte[] passwordSalt)
         {
             using(var hmac = new System.Security.Cryptography.HMACSHA512())
             {
@@ -52,5 +84,14 @@ namespace City.Api.Data
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
         }
+        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using(var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
+            {
+                var computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                return computeHash.SequenceEqual(passwordHash);
+            }
+        }
+
     }
 }
